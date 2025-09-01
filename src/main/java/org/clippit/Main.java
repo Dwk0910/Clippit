@@ -1,9 +1,12 @@
-package org.supersaver;
+package org.clippit;
+
+import org.clippit.commands.*;
 
 public class Main extends Clippit {
     static {
         // Register commands here
-        registerCommand("Help", 1, new org.supersaver.commands.Help());
+        registerCommand("Help", 0, new Help());
+        registerCommand("Save", 2, new Save());
     }
 
     public static void main(String[] args) {
