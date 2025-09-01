@@ -7,6 +7,8 @@ public class Main extends Clippit {
         // Register commands here
         registerCommand("Help", new Help());
         registerCommand("Save", new Save());
+        registerCommand("Load", new Load());
+        registerCommand("List", new List());
     }
 
     public static void main(String[] args) {
@@ -20,6 +22,9 @@ public class Main extends Clippit {
             switch (args[0]) {
                 case "help" -> executeCommand("Help", args);
                 case "save" -> executeCommand("Save", args);
+                case "load" -> executeCommand("Load", args);
+                case "list" -> executeCommand("List", args);
+                default -> System.out.println("%: Not avaliable option.");
             }
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getClass().getSimpleName());

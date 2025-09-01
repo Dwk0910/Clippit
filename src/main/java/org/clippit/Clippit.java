@@ -43,6 +43,7 @@ public class Clippit {
         CommandInfo cmdinf = commandMap.get(name);
         if (cmdinf == null)
             throw new RuntimeException("[Please report this error to developer ] Unknown command: " + name);
+        else if (cmdinf.requiredParameter == 0) cmdinf.command.run(null);
         else if (args.length - 1 >= cmdinf.requiredParameter) cmdinf.command.run(args);
         else
             throw new IllegalArgumentException("Required argument count: %s, Given: %s".formatted(cmdinf.requiredParameter, args.length - 1));
