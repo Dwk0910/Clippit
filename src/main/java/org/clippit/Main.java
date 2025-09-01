@@ -5,8 +5,8 @@ import org.clippit.commands.*;
 public class Main extends Clippit {
     static {
         // Register commands here
-        registerCommand("Help", 0, new Help());
-        registerCommand("Save", 2, new Save());
+        registerCommand("Help", new Help());
+        registerCommand("Save", new Save());
     }
 
     public static void main(String[] args) {
@@ -19,6 +19,7 @@ public class Main extends Clippit {
 
             switch (args[0]) {
                 case "help" -> executeCommand("Help", args);
+                case "save" -> executeCommand("Save", args);
             }
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getClass().getSimpleName());
