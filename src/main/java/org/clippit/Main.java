@@ -1,34 +1,34 @@
 package org.clippit;
 
+import java.util.Arrays;
+
 import org.clippit.commands.*;
 
 public class Main extends Clippit {
     static {
         // Register commands here
-        registerCommand("Help", new Help());
-        registerCommand("Save", new Save());
-        registerCommand("Load", new Load());
-        registerCommand("List", new List());
+        registerCommand("help", new Help());
+        registerCommand("save", new Save());
+        registerCommand("load", new Load());
+        registerCommand("list", new List());
     }
 
     public static void main(String[] args) {
+        java.util.List<String> argList = Arrays.stream(args).toList();
         try {
-            if (args.length == 0) {
+            if (argList.isEmpty()) {
                 //TODO: TUI interface
-                executeCommand("Help", new String[0]);
+                executeCommand("help", new String[0]);
                 return;
             }
 
-            switch (args[0]) {
-                case "help" -> executeCommand("Help", args);
-                case "save" -> executeCommand("Save", args);
-                case "load" -> executeCommand("Load", args);
-                case "list" -> executeCommand("List", args);
-                default -> System.out.println("%: Not avaliable option.");
-            }
+            executeCommand(argList.get(0), args);
+
         } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getClass().getSimpleName());
+            System.out.println("Clippit Error: " + e.getClass().getSimpleName());
             System.out.println(e.getMessage());
+        } catch (RuntimeException e) {
+            System.out.printf("Clippit: %s: Not avaliable option.%n", argList.get(0));
         }
     }
 }

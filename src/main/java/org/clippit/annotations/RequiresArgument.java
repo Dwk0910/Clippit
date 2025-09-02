@@ -8,5 +8,5 @@ import java.lang.annotation.RetentionPolicy;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequiresArgument {
-    int count() default 0;
+    int count() default 1;
 }
