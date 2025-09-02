@@ -14,21 +14,16 @@ public class Main extends Clippit {
     }
 
     public static void main(String[] args) {
-        java.util.List<String> argList = Arrays.stream(args).toList();
         try {
-            if (argList.isEmpty()) {
+            if (args.length == 0) {
                 //TODO: TUI interface
                 executeCommand("help", new String[0]);
                 return;
             }
 
-            executeCommand(argList.get(0), args);
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("Clippit Error: " + e.getClass().getSimpleName());
+            executeCommand(args[0], Arrays.copyOf(args, 1, String[].class));
+        } catch (Exception e) {
             System.out.println(e.getMessage());
-        } catch (RuntimeException e) {
-            System.out.printf("Clippit: %s: Not avaliable option.%n", argList.get(0));
         }
     }
 }
