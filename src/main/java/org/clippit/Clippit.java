@@ -44,8 +44,8 @@ public class Clippit {
         if (cmdinf == null)
             throw new ClippitException("Clippit: Unknown command: " + name);
         else if (cmdinf.requiredParameter == 0) cmdinf.command.run(null);
-        else if (args.length - 1 >= cmdinf.requiredParameter) cmdinf.command.run(args);
+        else if (args.length >= cmdinf.requiredParameter) cmdinf.command.run(args);
         else
-            throw new ClippitException.LackOfArgumentException("Clippit: Required argument count: %s, Given: %s".formatted(cmdinf.requiredParameter, args.length - 1));
+            throw new ClippitException.LackOfArgumentException("Clippit: Required argument count: %s, Given: %s".formatted(cmdinf.requiredParameter, args.length));
     }
 }

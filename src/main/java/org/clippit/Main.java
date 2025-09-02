@@ -21,7 +21,7 @@ public class Main extends Clippit {
                 return;
             }
 
-            executeCommand(args[0], Arrays.copyOf(args, 1, String[].class));
+            executeCommand(args[0], Arrays.copyOfRange(args, 1, args.length, String[].class));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
