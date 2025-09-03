@@ -1,0 +1,2 @@
+[![Gradle CI](https://github.com/Dwk0910/Clippit/actions/workflows/gradle.yml/badge.svg)](https://github.com/Dwk0910/Clippit/actions/workflows/gradle.yml)
+## *Clippit - A simple tool to clip, save, and load your directories or files*
