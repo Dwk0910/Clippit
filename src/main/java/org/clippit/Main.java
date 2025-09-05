@@ -11,6 +11,7 @@ public class Main extends Clippit {
         registerCommand(new Save(), "save");
         registerCommand(new Load(), "load");
         registerCommand(new List(), "list");
+        registerCommand(new Tree(), "tree");
         registerCommand(new Delete(), "remove", "delete");
     }
 
