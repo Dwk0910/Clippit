@@ -7,10 +7,11 @@ import org.clippit.commands.*;
 public class Main extends Clippit {
     static {
         // Register commands here
-        registerCommand("help", new Help());
-        registerCommand("save", new Save());
-        registerCommand("load", new Load());
-        registerCommand("list", new List());
+        registerCommand(new Help(), "help");
+        registerCommand(new Save(), "save");
+        registerCommand(new Load(), "load");
+        registerCommand(new List(), "list");
+        registerCommand(new Delete(), "remove", "delete");
     }
 
     public static void main(String[] args) {
