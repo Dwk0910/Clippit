@@ -10,14 +10,17 @@ import java.util.List;
 
 public class Clippit {
     public static Path datDir = Path.of(System.getProperty("user.home"), ".clippit");
+    public static Path tempDir = Path.of(System.getProperty("java.io.tmpdir"), "clippit");
     public static Path templateDir = Path.of(datDir.toAbsolutePath().toString(), "templates");
 
     static {
         // Create essential directories
         if (!datDir.toFile().exists()) if (!datDir.toFile().mkdirs())
             throw new Error("Unable to create directory " + datDir.toAbsolutePath());
-        else if (!templateDir.toFile().exists()) if (!templateDir.toFile().mkdirs())
+        if (!templateDir.toFile().exists()) if (!templateDir.toFile().mkdirs())
             throw new Error("Unable to create directory " + templateDir.toAbsolutePath());
+        if (!tempDir.toFile().exists()) if (!tempDir.toFile().mkdirs())
+            throw new Error("Unable to create directory " + tempDir.toAbsolutePath());
     }
 
     private static final List<CommandInfo> commandMap = new ArrayList<>();
