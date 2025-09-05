@@ -72,5 +72,4 @@ public class Util {
 
         return String.format("%.1f %s", displaySize, units[unitIndex]);
     }
-
 }
