@@ -3,7 +3,11 @@
 Clippit is a simple CLI tool for managing and using **templates**. With Clippit, you can save, load, remove, and list templates easily from the command line.
 
 ### Installation
-*Comming soon*
+#### Homebrew
+```
+brew tap Dwk0910/Clippit
+brew install clippit
+```
 
 ### Usage
 ```
