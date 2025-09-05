@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
@@ -31,17 +32,19 @@ public class Save implements Clippit.Command {
         try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(path);
              ZipFile zipFile = new ZipFile(Path.of(Clippit.templateDir.toString(), argv[0] + ".zip").toString())
         ) {
+            java.util.List<Path> pathList = new ArrayList<>();
+            dirStream.forEach(pathList::add);
             ZipParameters parameters = new ZipParameters();
             parameters.setCompressionMethod(CompressionMethod.DEFLATE);
-            if (!dirStream.iterator().hasNext()) {
+            if (pathList.isEmpty()) {
                 if (Util.ask("Directory '%s' is empty. Do you want to add empty directory?".formatted(argv[1])))
                     zipFile.addFolder(path.toFile());
                 else throw new ClippitException("Action cancelled.");
             } else {
-                dirStream.forEach(path_ -> {
+                pathList.forEach(path_ -> {
                     try {
                         File f = path_.toFile();
-                        System.out.println(f.getAbsolutePath());
+                        System.out.printf("Adding %s...%n", f.getPath());
                         if (f.isDirectory()) zipFile.addFolder(f, parameters);
                         else zipFile.addFile(f, parameters);
                     } catch (ZipException e) {
