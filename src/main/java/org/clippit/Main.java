@@ -16,7 +16,7 @@ public class Main extends Clippit {
         registerCommand(new Tree(), "tree");
         registerCommand(new Delete(), "remove", "delete");
 
-        registerCommand((argv) -> System.out.printf("Clippit %s%n", version), "--v");
+        registerCommand((argv) -> System.out.printf("Clippit %s%n", version), "--v", "--version");
     }
 
     public static void main(String[] args) {
