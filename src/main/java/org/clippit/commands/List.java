@@ -20,6 +20,7 @@ public class List implements Clippit.Command {
         if (templates.isEmpty()) System.out.println("No templates found.");
         else {
             final boolean overOne = templates.size() > 1;
+            long totalSize = 0L;
             System.out.println("There " + ((overOne) ? "are " : "is ") + templates.size() + ((overOne) ? " templates:" : " template:"));
             AsciiTable at = new AsciiTable();
             at.addRule();
@@ -28,9 +29,11 @@ public class List implements Clippit.Command {
             SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd. HH:mm:ss");
             for (File f : templates) {
                 at.addRow(FilenameUtils.getBaseName(f.getName()), df.format(f.lastModified()), Util.getReadableSize(FileUtils.sizeOf(f)));
+                totalSize += FileUtils.sizeOf(f);
             }
             at.addRule();
             System.out.println(at.render());
+            System.out.println("Total size : " + Util.getReadableSize(totalSize));
         }
     }
 }
