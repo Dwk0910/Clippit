@@ -28,33 +28,41 @@ public class Save implements Clippit.Command {
         if (!path.toFile().exists()) throw new ClippitException("%s: Not valid file or directory.".formatted(argv[1]));
         if (Util.isExist(argv[0])) throw new ClippitException("%s: Template already exists.".formatted(argv[0]));
 
-
-        try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(path);
-             ZipFile zipFile = new ZipFile(Path.of(Clippit.templateDir.toString(), argv[0] + ".zip").toString())
-        ) {
-            java.util.List<Path> pathList = new ArrayList<>();
-            dirStream.forEach(pathList::add);
-            ZipParameters parameters = new ZipParameters();
-            parameters.setCompressionMethod(CompressionMethod.DEFLATE);
-            if (pathList.isEmpty()) {
-                if (Util.ask("Directory '%s' is empty. Do you want to add empty directory?".formatted(argv[1])))
-                    zipFile.addFolder(path.toFile());
-                else throw new ClippitException("Action cancelled.");
-            } else {
-                pathList.forEach(path_ -> {
-                    try {
-                        File f = path_.toFile();
-                        System.out.printf("Adding %s...%n", f.getPath());
-                        if (f.isDirectory()) zipFile.addFolder(f, parameters);
-                        else zipFile.addFile(f, parameters);
-                    } catch (ZipException e) {
-                        System.out.println(e.getMessage());
-                    }
-                });
+        if (path.toFile().isDirectory()) {
+            try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(path);
+                 ZipFile zipFile = new ZipFile(Path.of(Clippit.templateDir.toString(), argv[0] + ".zip").toString())
+            ) {
+                java.util.List<Path> pathList = new ArrayList<>();
+                dirStream.forEach(pathList::add);
+                ZipParameters parameters = new ZipParameters();
+                parameters.setCompressionMethod(CompressionMethod.DEFLATE);
+                if (pathList.isEmpty()) {
+                    if (Util.ask("Directory '%s' is empty. Do you want to add empty directory?".formatted(argv[1])))
+                        zipFile.addFolder(path.toFile());
+                    else throw new ClippitException("Action cancelled.");
+                } else {
+                    pathList.forEach(path_ -> {
+                        try {
+                            File f = path_.toFile();
+                            System.out.printf("Adding %s...%n", f.getPath());
+                            zipFile.addFolder(f, parameters);
+                        } catch (ZipException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    });
+                }
+                System.out.printf("%s: Template successfully created.%n", argv[0]);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            try (ZipFile zipFile = new ZipFile(Path.of(Clippit.templateDir.toString(), argv[0] + ".zip").toString())) {
+                System.out.printf("Adding %s...%n", path);
+                zipFile.addFile(path.toFile());
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
             System.out.printf("%s: Template successfully created.%n", argv[0]);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
         }
     }
 }
