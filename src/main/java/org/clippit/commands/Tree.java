@@ -25,9 +25,7 @@ public class Tree implements Clippit.Command {
         File extracted = Path.of(Clippit.tempDir.toString(), "tree").toFile();
         try (ZipFile zipFile = new ZipFile(template)) {
             zipFile.extractAll(extracted.getPath());
-
             if (extracted.listFiles() == null) throw new ClippitException("Template has no files.");
-
             new ListingTreePrinter().print(Util.buildTree(extracted));
         } catch (IOException e) {
             System.out.println(e.getMessage());
