@@ -5,12 +5,18 @@ import java.util.Arrays;
 import org.clippit.commands.*;
 
 public class Main extends Clippit {
+    public static String version = "v1.0.0";
+
     static {
         // Register commands here
-        registerCommand("help", new Help());
-        registerCommand("save", new Save());
-        registerCommand("load", new Load());
-        registerCommand("list", new List());
+        registerCommand(new Help(), "help");
+        registerCommand(new Save(), "save");
+        registerCommand(new Load(), "load");
+        registerCommand(new List(), "list");
+        registerCommand(new Tree(), "tree");
+        registerCommand(new Delete(), "remove", "delete");
+
+        registerCommand((argv) -> System.out.printf("Clippit %s%n", version), "--v", "--version");
     }
 
     public static void main(String[] args) {

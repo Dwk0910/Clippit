@@ -1,47 +1,70 @@
 package org.clippit.commands;
 
-import net.lingala.zip4j.model.enums.EncryptionMethod;
+import org.apache.commons.io.FilenameUtils;
+import org.clippit.util.Util;
 import org.clippit.Clippit;
 import org.clippit.ClippitException;
-import org.clippit.Util;
 import org.clippit.annotations.RequiresArgument;
 
 import java.io.File;
 import java.io.IOException;
 
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
-import java.util.Objects;
-import java.util.Arrays;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.CompressionMethod;
+import net.lingala.zip4j.exception.ZipException;
 
 @RequiresArgument(count = 2)
 public class Save implements Clippit.Command {
     @Override
     public void run(String... argv) {
-        File f = new File(argv[0]);
-        if (!f.exists()) throw new ClippitException("File does not exist: %s".formatted(argv[0]));
+        Path path = Paths.get(argv[1]);
+        if (!path.toFile().exists()) throw new ClippitException("%s: Not valid file or directory.".formatted(argv[1]));
+        if (Util.exists(argv[0])) throw new ClippitException("%s: Template already exists.".formatted(argv[0]));
 
-        ZipParameters parameters = new ZipParameters();
-        parameters.setCompressionMethod(CompressionMethod.DEFLATE);
-        parameters.setEncryptFiles(true);
-        parameters.setEncryptionMethod(EncryptionMethod.ZIP_STANDARD);
-
-        if (f.isDirectory()) {
-            File[] items = Objects.requireNonNull(f.listFiles());
-            try (ZipFile zipFile = new ZipFile(Path.of(Clippit.templateDir.toString(), "%s.zip".formatted(argv[1])).toString())) {
-                if (items.length == 0 && Util.ask("Directory %s has no any files. Do you want to save empty directory?")) {
-                    zipFile.addFolder(f);
+        if (path.toFile().isDirectory()) {
+            try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(path);
+                 ZipFile zipFile = new ZipFile(Path.of(Clippit.templateDir.toString(), argv[0] + ".zip").toString())
+            ) {
+                java.util.List<Path> pathList = new ArrayList<>();
+                dirStream.forEach(pathList::add);
+                ZipParameters parameters = new ZipParameters();
+                parameters.setCompressionMethod(CompressionMethod.DEFLATE);
+                if (pathList.isEmpty()) {
+                    if (Util.ask("Directory '%s' is empty. Do you want to add empty directory?".formatted(argv[1])))
+                        zipFile.addFolder(path.toFile());
+                    else throw new ClippitException("Action cancelled.");
+                } else {
+                    pathList.forEach(path_ -> {
+                        try {
+                            File f = path_.toFile();
+                            System.out.printf("Adding %s...%n", FilenameUtils.getName(f.getPath()));
+                            if (f.isDirectory()) zipFile.addFolder(f, parameters);
+                            else zipFile.addFile(f, parameters);
+                        } catch (ZipException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    });
                 }
-                zipFile.addFiles(Arrays.stream(items).toList(), parameters);
+                System.out.printf("%s: Template successfully created.%n", argv[0]);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
         } else {
-            System.out.println("File");
+            try (ZipFile zipFile = new ZipFile(Path.of(Clippit.templateDir.toString(), argv[0] + ".zip").toString())) {
+                System.out.printf("Adding %s...%n", path);
+                zipFile.addFile(path.toFile());
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            System.out.printf("%s: Template successfully created.%n", argv[0]);
         }
     }
 }
