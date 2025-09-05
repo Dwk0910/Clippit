@@ -1,6 +1,7 @@
 package org.clippit;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,15 @@ public class Util {
             if (item.getName().endsWith(".zip")) result.add(item);
         }
         return result;
+    }
+
+    public static volatile File getTemplate_resultFile = null;
+
+    public static File getTemplate(String name) {
+        getTemplates().forEach(item -> {
+            if (FilenameUtils.getBaseName(item.getName()).equalsIgnoreCase(name)) getTemplate_resultFile = item;
+        });
+        return getTemplate_resultFile;
     }
 
     public static String getReadableSize(long size) {
