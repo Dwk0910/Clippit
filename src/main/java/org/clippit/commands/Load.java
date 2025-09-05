@@ -24,12 +24,12 @@ public class Load implements Clippit.Command {
     public void run(String... argv) {
         try {
             File template = Util.getTemplate(argv[0]);
-            if (template == null) throw new ClippitException("Template %s is not exist.".formatted(argv[0]));
+            if (template == null) throw new ClippitException("%s: Template not exist.".formatted(argv[0]));
 
             File targetFolder = new File(".");
             if (argv.length >= 2) targetFolder = new File(argv[1]);
 
-            if (!targetFolder.exists() && Util.ask("Target folder '%s' is not exist. Do you want to create a new directrory?".formatted(argv[1])))
+            if (!targetFolder.exists() && Util.ask("Target folder '%s' does not exist. Do you want to create a new directrory?".formatted(argv[1])))
                 FileUtils.forceMkdir(targetFolder);
             else if (!targetFolder.isDirectory())
                 throw new ClippitException("'%s' is not a directory".formatted(argv[1]));

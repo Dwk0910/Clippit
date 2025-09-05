@@ -27,7 +27,7 @@ public class Save implements Clippit.Command {
     public void run(String... argv) {
         Path path = Paths.get(argv[1]);
         if (!path.toFile().exists()) throw new ClippitException("%s: Not valid file or directory.".formatted(argv[1]));
-        if (Util.isExist(argv[0])) throw new ClippitException("%s: Template already exists.".formatted(argv[0]));
+        if (Util.exists(argv[0])) throw new ClippitException("%s: Template already exists.".formatted(argv[0]));
 
         if (path.toFile().isDirectory()) {
             try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(path);

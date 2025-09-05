@@ -41,7 +41,7 @@ public class Util {
         return false;
     }
 
-    public static boolean isExist(String name) {
+    public static boolean exists(String name) {
         doRecovery();
         File f = new File(Path.of(Clippit.templateDir.toString(), name + ".zip").toString());
         if (!f.exists()) return false;
@@ -92,7 +92,7 @@ public class Util {
     public static TreeNode buildTree(File directory) {
         if (!directory.isDirectory()) {
             // 만약 파일이면 그냥 이름만 가진 노드 반환
-            return new SimpleTreeNode(" " + directory.getName());
+            return new SimpleTreeNode(directory.getName());
         }
 
         // 디렉터리 노드 생성
