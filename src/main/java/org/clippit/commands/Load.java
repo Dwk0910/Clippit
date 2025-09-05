@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils;
 
 import org.clippit.Clippit;
 import org.clippit.ClippitException;
-import org.clippit.Util;
+import org.clippit.util.Util;
 import org.clippit.annotations.RequiresArgument;
 
 import java.io.File;

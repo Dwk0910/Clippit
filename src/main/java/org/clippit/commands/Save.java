@@ -1,7 +1,7 @@
 package org.clippit.commands;
 
 import org.apache.commons.io.FilenameUtils;
-import org.clippit.Util;
+import org.clippit.util.Util;
 import org.clippit.Clippit;
 import org.clippit.ClippitException;
 import org.clippit.annotations.RequiresArgument;

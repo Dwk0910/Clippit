@@ -1,7 +1,13 @@
-package org.clippit;
+package org.clippit.util;
 
+import hu.webarticum.treeprinter.TreeNode;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+
+import hu.webarticum.treeprinter.SimpleTreeNode;
+
+import org.clippit.Clippit;
+import org.clippit.ColorText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,5 +87,26 @@ public class Util {
         }
 
         return String.format("%.1f %s", displaySize, units[unitIndex]);
+    }
+
+    public static TreeNode buildTree(File directory) {
+        if (!directory.isDirectory()) {
+            // 만약 파일이면 그냥 이름만 가진 노드 반환
+            return new SimpleTreeNode(" " + directory.getName());
+        }
+
+        // 디렉터리 노드 생성
+        SimpleTreeNode rootNode = new SimpleTreeNode(" " + directory.getName());
+
+        File[] files = directory.listFiles();
+        if (files != null) {
+            // 하위 파일/디렉터리 목록을 순회
+            for (File file : files) {
+                // 재귀 호출로 하위 노드들을 빌드
+                rootNode.addChild(buildTree(file));
+            }
+        }
+
+        return rootNode;
     }
 }
