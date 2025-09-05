@@ -1,5 +1,6 @@
 package org.clippit.commands;
 
+import org.apache.commons.io.FilenameUtils;
 import org.clippit.Util;
 import org.clippit.Clippit;
 import org.clippit.ClippitException;
@@ -44,8 +45,9 @@ public class Save implements Clippit.Command {
                     pathList.forEach(path_ -> {
                         try {
                             File f = path_.toFile();
-                            System.out.printf("Adding %s...%n", f.getPath());
-                            zipFile.addFolder(f, parameters);
+                            System.out.printf("Adding %s...%n", FilenameUtils.getName(f.getPath()));
+                            if (f.isDirectory()) zipFile.addFolder(f, parameters);
+                            else zipFile.addFile(f, parameters);
                         } catch (ZipException e) {
                             System.out.println(e.getMessage());
                         }
